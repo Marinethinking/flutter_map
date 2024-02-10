@@ -10,7 +10,7 @@ enum PolygonLabelPlacement {
 }
 
 /// [Polygon] class, to be used for the [PolygonLayer].
-class Polygon {
+class Polygon<R extends Object> {
   /// The points for the outline of the [Polygon].
   final List<LatLng> points;
 
@@ -68,6 +68,14 @@ class Polygon {
   ///
   /// Also see [PolygonLayer.performantRendering].
   final bool performantRendering;
+
+  /// Value notified in [PolygonLayer.hitNotifier]
+  ///
+  /// Polylines without a defined [hitValue] are still hit tested, but are not
+  /// notified about.
+  ///
+  /// Should implement an equality operator to avoid breaking [Polygon.==].
+  final R? hitValue;
 
   /// Designates whether the given polygon points follow a clock or
   /// anti-clockwise direction.
@@ -128,6 +136,7 @@ class Polygon {
     this.labelPlacement = PolygonLabelPlacement.centroid,
     this.rotateLabel = false,
     this.performantRendering = true,
+    this.hitValue,
   }) : _filledAndClockwise =
             (isFilled ?? (color != null)) && isClockwise(points);
 
@@ -160,6 +169,7 @@ class Polygon {
           labelPlacement == other.labelPlacement &&
           rotateLabel == other.rotateLabel &&
           performantRendering == other.performantRendering &&
+          hitValue == other.hitValue &&
           // Expensive computations last to take advantage of lazy logic gates
           listEquals(holePointsList, other.holePointsList) &&
           listEquals(points, other.points));
