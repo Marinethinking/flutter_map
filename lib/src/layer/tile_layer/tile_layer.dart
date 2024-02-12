@@ -395,6 +395,8 @@ class _TileLayerState extends State<TileLayer> with TickerProviderStateMixin {
     final camera = MapCamera.of(context);
     final mapController = MapController.of(context);
 
+    _resetSub;
+
     if (_mapControllerHashCode != mapController.hashCode) {
       _tileUpdateSubscription?.cancel();
 
